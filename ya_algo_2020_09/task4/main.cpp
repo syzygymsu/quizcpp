@@ -1,4 +1,4 @@
-// https://contest.yandex.ru/yacup/contest/19811/problems/D/
+// problems/D/
 
 #include <iostream>
 
@@ -7,9 +7,8 @@ int main()
 	int n, m;
 	std::cin >> n;
 	std::cin >> m;
-	long long res = 0;
-	long long bsumm = 0;
-	long long asumm = 0;
+	int bsumm = 0;
+	int asumm = 0;
 	int aMax = -1;
 	int aMaxIndFirst = -1;
 	int aMaxIndLast = -1;
@@ -51,9 +50,9 @@ int main()
 			bMax = c;
 		}
 	}
-	long long small = (long long)bMax * (aMaxIndLast - aMaxIndFirst) + bsumm + (long long)bLast * (n - 1 - aMaxIndLast) + (long long)bFirst * aMaxIndFirst;
-	long long big = (long long)aMax * (m - 1) + asumm;
-	res = big * 1000000000 + small;
+	int small = bMax * (aMaxIndLast - aMaxIndFirst) + bsumm + bLast * (n - 1 - aMaxIndLast) + bFirst * aMaxIndFirst;
+	int big = aMax * (m - 1) + asumm;
+	long long res = big * (long long)1e9 + small;
 	std::cout << res << std::endl;
 	return 0;
 }

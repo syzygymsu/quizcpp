@@ -1,4 +1,4 @@
-// https://contest.yandex.ru/yacup/contest/19811/problems/A/
+// problems/A/
 
 #include <iostream>
 #include <cstdint>
