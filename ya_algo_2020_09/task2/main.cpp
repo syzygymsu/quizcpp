@@ -19,13 +19,8 @@ int main()
 		char prev = line[i - 1];
 		char curr = line[i];
 		if (curr == prev) {
-			if (minSize > 2) {
+			if (minSize > 2 || minFirst > prev) {
 				minFirst = prev;
-				minSecond = curr;
-			}
-			if (minFirst > prev) {
-				minFirst = prev;
-				minSecond = curr;
 			}
 			minSize = 2;
 			++i;
