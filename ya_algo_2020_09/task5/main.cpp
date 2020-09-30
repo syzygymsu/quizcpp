@@ -1,7 +1,7 @@
 // problems/E/
 
-#include <iostream>
-// #include <fstream>
+// #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <queue>
@@ -66,7 +66,7 @@ std::pair<int, int> getCenter(const std::vector<Node>& graph, int u, int markedZ
 	return { t, res.second[t] };
 }
 
-int func(std::istream& f) {
+void func(std::istream& f, std::ostream& out) {
 	int n;
 	f >> n;
 	std::vector<Node> nodes(n);
@@ -82,22 +82,22 @@ int func(std::istream& f) {
 		nodes[first - 1].nodes.push_back(second - 1);
 		nodes[second - 1].nodes.push_back(first - 1);
 	}
-	if (n <= 3) {
-		std::cout << "1 2" << std::endl;
-		return 0;
-	}
+	//if (n <= 3) {
+	//	std::cout << "1 2" << std::endl;
+	//	return 0;
+	//}
 
 	auto big = getCenter(nodes, 0, -1);
 	auto left = getCenter(nodes, big.first, big.second);
 	auto right = getCenter(nodes, big.second, big.first);
-	std::cout << left.second + 1 << " " << right.second + 1 << std::endl;
-	return 0;
+	out << left.second + 1 << " " << right.second + 1 << std::endl;
 }
 
 
 int main() {
-	//std::fstream f("input2.txt");
-	//func(f);
-	func(std::cin);
+	std::ifstream f("input.txt");
+	std::ofstream out("output.txt");
+	func(f, out);
+	// func(std::cin, std::cout);
 	return 0;
 }
