@@ -7,7 +7,6 @@
 #include <queue>
 
 struct Node {
-	Node() {}
 	Node(int i) : index{ i } {}
 	int index;
 	std::vector<Node> nodes;
@@ -28,7 +27,6 @@ std::pair<std::pair<int, int>, std::vector<int>> bfs(const std::vector<Node>& gr
 	pred[u] = u; 
 	int maxDis = 0;
 	int nodeIdx = u;
-
 	while (!q.empty())
 	{
 		int t = q.front();
@@ -43,7 +41,6 @@ std::pair<std::pair<int, int>, std::vector<int>> bfs(const std::vector<Node>& gr
 				dis[v] = maxDis;
 				pred[v] = t;
 				nodeIdx = v;
-				
 			}
 		}
 	}
@@ -69,8 +66,8 @@ std::pair<int, int> getCenter(const std::vector<Node>& graph, int u, int markedZ
 void func(std::istream& f, std::ostream& out) {
 	int n;
 	f >> n;
-	std::vector<Node> nodes(n);
-
+	std::vector<Node> nodes;
+	nodes.reserve(n);
 	for (int i = 0; i < n; ++i) {
 		nodes.push_back(Node(i));
 	}
@@ -82,17 +79,12 @@ void func(std::istream& f, std::ostream& out) {
 		nodes[first - 1].nodes.push_back(second - 1);
 		nodes[second - 1].nodes.push_back(first - 1);
 	}
-	//if (n <= 3) {
-	//	std::cout << "1 2" << std::endl;
-	//	return 0;
-	//}
 
 	auto big = getCenter(nodes, 0, -1);
 	auto left = getCenter(nodes, big.first, big.second);
 	auto right = getCenter(nodes, big.second, big.first);
 	out << left.second + 1 << " " << right.second + 1 << std::endl;
 }
-
 
 int main() {
 	std::ifstream f("input.txt");
