@@ -1,6 +1,6 @@
 // problems/F/
 
-#include <iostream>
+// #include <iostream>
 #include <fstream>
 // #include <string>
 #include <vector>
@@ -58,6 +58,7 @@ void func(std::istream& f, std::ostream& out) {
             if (cols[i] > 0) {
                 fisrtNonZeroCol = i;
                 break;
+                // ++iterCount;
             }
         }
         int localNonZero = cols[fisrtNonZeroCol];
@@ -71,21 +72,29 @@ void func(std::istream& f, std::ostream& out) {
                         --localNonZero;
                     }
                     row.pop_back();
+                    // ++iterCount;
                 }
                 if (localNonZero == 0) {
                     break;
                 }
             }
             else {
+                // ++iterCount;
                 if (row.back() > positions[j]) {
+                    // std::cout << "more" << " localNonZero " << localNonZero << " " << fisrtNonZeroCol << std::endl;
                     positions[j + 1] = positions[j];
                 }
                 else {
                     if (row.back() > fisrtNonZeroCol) {
+                        // std::cout << "less1 "  << localNonZero << std::endl;
+
                         positions[j + 1] = row.back();
                     } else if (row.back() == fisrtNonZeroCol) {
+                        // std::cout << "less2 " << localNonZero <<std::endl;
+
                         --localNonZero;
                         if (localNonZero == 0) {
+                            positions[j + 1] = fisrtNonZeroCol;
                             break;
                         }
                         positions[j + 1] = fisrtNonZeroCol;
@@ -110,15 +119,15 @@ void func(std::istream& f, std::ostream& out) {
     out << iteration << std::endl;
 }
 
-#include <chrono> 
+// #include <chrono> 
 int main() {
     std::ifstream f("input.txt");
     std::ofstream out("output.txt");
-    auto start = std::chrono::high_resolution_clock::now();
+    // auto start = std::chrono::high_resolution_clock::now();
     func(f, out);
     // func(std::cin, std::cout);
 
-    auto finish = std::chrono::high_resolution_clock::now();
-    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    // auto finish = std::chrono::high_resolution_clock::now();
+    // std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
     return 0;
 }
