@@ -1,27 +1,25 @@
 // problems/F/
 
-// #include <iostream>
+#include <iostream>
 #include <fstream>
-// #include <string>
 #include <vector>
 #include <algorithm>
-// #include <cstring>
 
-// using namespace std;
+using namespace std;
 
-//void print(const std::vector<int>& row) {
-//    std::cout << "[";
-//    for (int v : row) {
-//        std::cout << v << " ";
-//    }
-//    std::cout << "]" << std::endl;
-//}
-//
-//void print(const std::vector<std::vector<int>>& rows) {
-//    for (const auto& row : rows) {
-//        print(row);
-//    }
-//}
+void print(const std::vector<int>& row) {
+    std::cout << "[";
+    for (int v : row) {
+        std::cout << v << " ";
+    }
+    std::cout << "]" << std::endl;
+}
+
+void print(const std::vector<std::vector<int>>& rows) {
+    for (const auto& row : rows) {
+        print(row);
+    }
+}
 
 void func(std::istream& f, std::ostream& out) {
     int n, m, k;
@@ -52,7 +50,7 @@ void func(std::istream& f, std::ostream& out) {
     std::vector<int> positions(m + 1, 0);
     positions[0] = n + 1;
     int iteration = 0;
-    // int iterCount = 0;
+    int iterCount = 0;
     while (full_rows < m) {
         for (int i = fisrtNonZeroCol; i < n; ++i) {
             if (cols[i] > 0) {
@@ -71,26 +69,29 @@ void func(std::istream& f, std::ostream& out) {
                     if (row.back() == fisrtNonZeroCol) {
                         --localNonZero;
                     }
+                    cout << "in color " << iterCount << endl;
                     row.pop_back();
-                    // ++iterCount;
+                    ++iterCount;
                 }
+                ++iterCount;
                 if (localNonZero == 0) {
                     break;
                 }
+                cout << "skip color " << iterCount << endl;
             }
             else {
-                // ++iterCount;
+                ++iterCount;
                 if (row.back() > positions[j]) {
-                    // std::cout << "more" << " localNonZero " << localNonZero << " " << fisrtNonZeroCol << std::endl;
+                    std::cout << "more " << iterCount << " " << " localNonZero " << localNonZero << " " << fisrtNonZeroCol << std::endl;
                     positions[j + 1] = positions[j];
                 }
                 else {
                     if (row.back() > fisrtNonZeroCol) {
-                        // std::cout << "less1 "  << localNonZero << std::endl;
+                        std::cout << "less1 " << iterCount <<" " << localNonZero << std::endl;
 
                         positions[j + 1] = row.back();
                     } else if (row.back() == fisrtNonZeroCol) {
-                        // std::cout << "less2 " << localNonZero <<std::endl;
+                        std::cout << "less2 " << iterCount  << " " << localNonZero <<std::endl;
 
                         --localNonZero;
                         if (localNonZero == 0) {
@@ -104,7 +105,7 @@ void func(std::istream& f, std::ostream& out) {
             if (positions[j + 1] == n + 1) {
                 full_rows = j + 1;
             }
-            else if (positions[j + 1] == 0) {
+            else if (positions[j + 1] == fisrtNonZeroCol) {
                 break;
             }
         }
@@ -115,13 +116,13 @@ void func(std::istream& f, std::ostream& out) {
     if (color) {
         --iteration;
     }
-    // std::cout << "iterCount " << iterCount << " iteration " << iteration << std::endl;
+    std::cout << "iterCount " << iterCount << " iteration " << iteration << std::endl;
     out << iteration << std::endl;
 }
 
 // #include <chrono> 
 int main() {
-    std::ifstream f("input.txt");
+    std::ifstream f("input100x100.txt");
     std::ofstream out("output.txt");
     // auto start = std::chrono::high_resolution_clock::now();
     func(f, out);
