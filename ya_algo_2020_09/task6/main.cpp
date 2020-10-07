@@ -69,7 +69,7 @@ void func(std::istream& f, std::ostream& out) {
                     if (row.back() == fisrtNonZeroCol) {
                         --localNonZero;
                     }
-                    cout << "in color " << iterCount << endl;
+                    // cout << "in color " << iterCount << endl;
                     row.pop_back();
                     ++iterCount;
                 }
@@ -77,21 +77,21 @@ void func(std::istream& f, std::ostream& out) {
                 if (localNonZero == 0) {
                     break;
                 }
-                cout << "skip color " << iterCount << endl;
+                // cout << "skip color " << iterCount << endl;
             }
             else {
                 ++iterCount;
                 if (row.back() > positions[j]) {
-                    std::cout << "more " << iterCount << " " << " localNonZero " << localNonZero << " " << fisrtNonZeroCol << std::endl;
+                    // std::cout << "more " << iterCount << " " << " localNonZero " << localNonZero << " " << fisrtNonZeroCol << std::endl;
                     positions[j + 1] = positions[j];
                 }
                 else {
                     if (row.back() > fisrtNonZeroCol) {
-                        std::cout << "less1 " << iterCount <<" " << localNonZero << std::endl;
+                        // std::cout << "less1 " << iterCount <<" " << localNonZero << std::endl;
 
                         positions[j + 1] = row.back();
                     } else if (row.back() == fisrtNonZeroCol) {
-                        std::cout << "less2 " << iterCount  << " " << localNonZero <<std::endl;
+                        // std::cout << "less2 " << iterCount  << " " << localNonZero <<std::endl;
 
                         --localNonZero;
                         if (localNonZero == 0) {
@@ -120,15 +120,13 @@ void func(std::istream& f, std::ostream& out) {
     out << iteration << std::endl;
 }
 
-// #include <chrono> 
+#include <chrono> 
 int main() {
-    std::ifstream f("input100x100.txt");
+    std::ifstream f("input30x30p.txt");
     std::ofstream out("output.txt");
-    // auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
     func(f, out);
-    // func(std::cin, std::cout);
-
-    // auto finish = std::chrono::high_resolution_clock::now();
-    // std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
     return 0;
 }
