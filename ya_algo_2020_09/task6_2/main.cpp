@@ -225,6 +225,14 @@ int func(std::istream& f, std::ostream& out) {
                 ++iterCount;
                 if (row.empty() || row.back() > positions[j]) {
                     positions[j + 1] = positions[j];
+                    if (positions[j + 1] >= n) {
+                        // std::cout << "full " << j << std::endl;
+                        full_rows = j + 1;
+                    }
+                    else {
+                        break;
+                    }
+                    // break;
                 }
                 else {
                     if (row.back() > fisrtNonZeroCol) {
@@ -292,11 +300,14 @@ int main() {
     test("input3.txt", 3);
     test("input30x30.txt", 57);
     test("input30x30p.txt", 57);
+    test("input30x30p2.txt", 57);
     test("input30.txt", 58);
     test("input10.txt", 19);
     test("inputdotslongdots.txt", 11);
     test("inputdots.txt", 10);
     test("inputdots2.txt", 10);
     // test("input10kx10k.txt", 19997);
+    // test("input100kx100k.txt", 199997);
+    // test("input250kx250k.txt", 499997);
     return 0;
 }
