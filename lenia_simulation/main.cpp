@@ -4,7 +4,7 @@
 #include <string>
 #include <limits>
 
-using namespace std;
+// using namespace std;
 
 enum class ShootingType {
     SENSING,
@@ -20,7 +20,7 @@ struct Segment {
 
 
 
-ostream& operator<<(ostream& os, const Segment& s) {
+std::ostream& operator<<(std::ostream& os, const Segment& s) {
     return os << s.left << " -> " << s.right << " " << static_cast<int>(s.type);
 }
 
@@ -115,7 +115,7 @@ std::vector<Segment> Simulation::generateSegments(const std::vector<std::pair<do
                         b.left = sens.first;
                         b.right = sens.second;
                         segments.push_back(b);
-                        std::cout << "4\n";
+                        // std::cout << "4\n";
                     }
                     ++sensingInd;
                     down.first = sens.second;
@@ -185,7 +185,7 @@ double Simulation::capacity(double uprate, double downrate) const {
                 totalVolume = 0;
             }
             break;
-        } 
+        }
         case ShootingType::BOTH: {
             if (downrate <= uprate) {
                 totalVolume += (seg.right - seg.left) * (uprate - downrate);
@@ -216,7 +216,7 @@ int main()
     auto sensing = std::vector<std::pair<double, double>>{ std::make_pair(1.0, 4.0) };
     auto downlink = std::vector<std::pair<double, double>>{ std::make_pair(0.0, 2.0) };
 
-    auto downlink2= std::vector<std::pair<double, double>>{ std::make_pair(1.0, 4.0) };
+    auto downlink2 = std::vector<std::pair<double, double>>{ std::make_pair(1.0, 4.0) };
     auto sensing2 = std::vector<std::pair<double, double>>{ std::make_pair(0.0, 2.0) };
 
     Simulation s(sensing2, downlink2);
