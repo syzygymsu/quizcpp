@@ -30,10 +30,10 @@ double Device::time(double angle) const {
 
 double Device::angle(double time) const {
     double critical = top * (1. / acc + 1. / dec);
-    if (critical <= time) {
+    if (critical >= time) {
         return std::min(acc * dec * time * time / (acc + dec), 180.);
     }
-    return std::min(top * (time + critical / 2.), 180.);
+    return std::min(top * (time - critical / 2.), 180.);
 }
 
 
@@ -44,7 +44,7 @@ int main()
 {
     Device d(5, 3, 20);
     cout << d.time(30) << std::endl;
-    cout << d.angle(1) << std::endl;
+    cout << d.angle(5) << std::endl;
     return 0;
 }
 
