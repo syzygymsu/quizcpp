@@ -33,11 +33,9 @@ double Device::time(double angle) const {
 double Device::angle(double time) const {
     double critical = top * (1. / acc + 1. / dec);
     if (critical > time) {
-        double res = acc * dec * time * time / (acc + dec) / 2.;
-        return res;
+        return acc * dec * time * time / (acc + dec) / 2.;
     }
-    double res =  top * (time - critical / 2.);
-    return res;
+    return top * (time - critical / 2.);
 }
 
 
