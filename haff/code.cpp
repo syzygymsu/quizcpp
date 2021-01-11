@@ -1,8 +1,7 @@
 #include "make_tree.h"
 #include "tree.h"
-#include <stdlib.h>
-#include <assert.h>
 #include <cstdio>
+#include <vector>
 
 struct Buf {
 	int counter;
@@ -11,9 +10,15 @@ struct Buf {
 };
 
 struct List5 {
-	int nomer;
-	char* mass;
-	List5 *next;
+	List5(int size) : map(size) {}
+	void add(int nomer, std::vector<char> mass) {
+		map[nomer] = mass;
+	}
+	std::vector<char> get(int nomer) {
+		return map[nomer];
+	}
+private:
+	std::vector<std::vector<char>> map;
 };
 
 
@@ -22,13 +27,6 @@ static void FilePrintZagolovok(int* mass, FILE* f, int size)
 	fwrite(mass, 4, size, f);
 }
 
-static void addnextL5(List5* root, List5* newelem)
-{
-	// if (root->next != NULL) { root->next->prev = newelem; }
-	// newelem->prev = root;
-	newelem->next = root->next;
-	root->next = newelem;
-}
 
 static void Left_Right2(TreeNode* pos, void(*f)(TreeNode*, List5*), List5* root)
 {
@@ -42,8 +40,6 @@ static void Left_Right2(TreeNode* pos, void(*f)(TreeNode*, List5*), List5* root)
 static void func(TreeNode* pos, List5* root)
 {
 	char a[256]; // why size == 256
-	List5* c1;
-	char* mass;
 	TreeNode* b;
 	int i = 0, j;
 	if (pos->left || pos->right) return;
@@ -57,31 +53,18 @@ static void func(TreeNode* pos, List5* root)
 		i++;
 		b = b->prev;
 	}
-	mass = (char*)malloc(i + 1);
-	assert(mass);
+	std::vector<char> mass(i); // TODO leak
 	for (j = 0; j < i; j++)
 	{
 		mass[j] = a[i - j - 1];
 	}
-	// 2 simulate end of array
-	mass[i] = 2;
-	c1 = (List5*)malloc(sizeof(List5));
-	assert(c1);
-	c1->next = nullptr;
-	c1->mass = mass;
-	c1->nomer = pos->value.nomer;
-	addnextL5(root, c1);
-
+	root->add(pos->value.nomer, mass);
 }
 
-static List5* MakeList5(TreeNode* rootTree)
+static List5 MakeList5(TreeNode* rootTree, int size)
 {
-	List5* root;
-	root = (List5*)malloc(sizeof(List5));
-	assert(root);
-	root->next = nullptr;
-	root->nomer = 999;
-	Left_Right2(rootTree, func, root);
+	List5 root(size);
+	Left_Right2(rootTree, func, &root);
 	return root;
 }
 
@@ -131,20 +114,9 @@ static void addBit(Buf* buffer, int symb) {
 	}
 }
 
-static char* Search(int c, List5* root)
-{
-	List5* s;
-	List5* cur;
-	cur = root->next;
-	while (cur->nomer != c) cur = cur->next;
-	s = cur;
-	return s->mass;
-}
 
 static void FileOut(List5* root5, const char* in, const char* out, int* mass, int size)
 {
-	int c;
-	char* s;
 	FILE* filein;
 	Buf buffer;
 	if ((filein = fopen(in, "rb")) == NULL)
@@ -165,13 +137,11 @@ static void FileOut(List5* root5, const char* in, const char* out, int* mass, in
 
 	for (;;)
 	{
-		c = getc(filein);
+		int c = getc(filein);
 		if (c == EOF) break;
-		s = Search(c, root5);
-		while (*s != 2) // what is 2?
-		{
-			addBit(&buffer, *s);
-			s++;
+		std::vector vec = root5->get(c);
+		for (char ch : vec) {
+			addBit(&buffer, ch);
 		}
 	}
 	fclose(filein);
@@ -188,10 +158,10 @@ void FileCode(const char* in, const char* out)
 	int numb[size];
 	MakeMass(in, numb, size);
 	TreeNode* rootTree = MakeTreeFromArray(numb, size);
-	if (rootTree != NULL)
+	if (rootTree != nullptr)
 	{
-		List5* root5 = MakeList5(rootTree);
-		FileOut(root5, in, out, numb, size);
+		List5 root5 = MakeList5(rootTree, size);
+		FileOut(&root5, in, out, numb, size);
 		DelTree(rootTree);
 	}
 	else
