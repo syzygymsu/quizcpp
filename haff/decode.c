@@ -7,7 +7,6 @@ static void FileReadZagolovok(int* mass, FILE* f)
 	fread(mass, 4, 256, f);
 }
 
-
 static void Convert8(char* buf, int b)
 {
 	int i, a;
@@ -24,6 +23,7 @@ static int Summ(int* mass)
 	for (i = 0; i < 256; i++) a += mass[i];
 	return a;
 }
+
 static void Encode(TreeNode* root, FILE* fileout, FILE* filein, int summ)
 {
 	char mass[8];
@@ -53,12 +53,7 @@ static void Encode(TreeNode* root, FILE* fileout, FILE* filein, int summ)
 			fwrite(&list->value.nomer, 1, 1, fileout);
 			list = root;
 			i++;
-			//break;
 		}
-
-		/*if(mass[cnt]==0) list=GoLeft(list);
-		else list=GoRight(list);*/
-
 
 		cnt++;
 	}
