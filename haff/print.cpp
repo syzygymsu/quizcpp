@@ -1,5 +1,5 @@
-#include "Biblio.h"
-#include <stdio.h>
+#include "tree.h"
+#include <cstdio>
 
 static void PrintElem(TreeNode* a)
 {

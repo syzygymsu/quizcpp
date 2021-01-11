@@ -1,10 +1,10 @@
-#include "Biblio.h"
+#include "tree.h"
 #include <queue>
 
-TreeNode* MakeTreeFromArray(int* numb) {
+TreeNode* MakeTreeFromArray(int* numb, int size) {
 	auto cmp = [](TreeNode* left, TreeNode* right) { return right->value.kolvo < left->value.kolvo; };
 	std::priority_queue<TreeNode*, std::vector<TreeNode*>, decltype(cmp) > q2;
-	for (int i = 0; i < 256; i++)
+	for (int i = 0; i < size; i++)
 	{
 		if (numb[i] > 0)
 		{
@@ -30,7 +30,7 @@ TreeNode* MakeTreeFromArray(int* numb) {
 		AddRight(b, c1);
 		q2.push(c1);
 	}
-	TreeNode* rootTree = NULL;
+	TreeNode* rootTree = nullptr;
 	if (!q2.empty()) {
 		rootTree = q2.top();
 		q2.pop();

@@ -1,32 +1,27 @@
-#include "Biblio.h"
-#include <stdio.h>
+#include "make_tree.h"
+#include "tree.h"
+#include <cstdio>
 
 
-static void FileReadZagolovok(int* mass, FILE* f)
+static void FileReadZagolovok(int* mass, FILE* f, int size)
 {
-	fread(mass, 4, 256, f);
+	fread(mass, 4, size, f);
 }
 
-static void Convert8(char* buf, int b)
+static int getBit(int cnt, int b)
 {
-	int i, a;
-	for (i = 0; i < 8; i++)
-	{
-		a = 8 - i - 1;
-		buf[a] = ((b >> i) & 1);
-	}
+	return ((b >> (8 - cnt - 1)) & 1);
 }
 
-static int Summ(int* mass)
+static int Summ(int* mass, int size)
 {
-	int i, a = 0;
-	for (i = 0; i < 256; i++) a += mass[i];
-	return a;
+	int summ = 0;
+	for (int i = 0; i < size; i++) summ += mass[i];
+	return summ;
 }
 
 static void Encode(TreeNode* root, FILE* fileout, FILE* filein, int summ)
 {
-	char mass[8];
 	TreeNode* list;
 	int cnt = 8, b, i;
 	list = root;
@@ -38,15 +33,16 @@ static void Encode(TreeNode* root, FILE* fileout, FILE* filein, int summ)
 			b = getc(filein);
 			if (b == EOF)
 			{
-				fclose(filein);
-				fclose(fileout);
 				return;
 			}
-			Convert8(mass, b);
 		}
 
-		if (mass[cnt] == 0) 	list = GoLeft(list);
-		else 			list = GoRight(list);
+		if (getBit(cnt, b) == 0) {
+			list = GoLeft(list);
+		}
+		else {
+			list = GoRight(list);
+		}
 
 		if (!(GoLeft(list) || GoRight(list)))
 		{
@@ -61,10 +57,9 @@ static void Encode(TreeNode* root, FILE* fileout, FILE* filein, int summ)
 
 void DecodeFileOut(const char* out, const char* in)
 {
-	int summ;
-	int mass[256];
+	constexpr int size = 256;
+	int mass[size];
 	FILE* fileout, * filein;
-	TreeNode* rootTree = NULL;
 	if ((fileout = fopen(out, "w")) == NULL)
 	{
 		perror(out);
@@ -77,11 +72,11 @@ void DecodeFileOut(const char* out, const char* in)
 		return;
 	}
 
-	FileReadZagolovok(mass, filein);
+	FileReadZagolovok(mass, filein, size);
 
-	rootTree = MakeTreeFromArray(mass);
+	TreeNode* rootTree = MakeTreeFromArray(mass, size);
 	//PrintTree(rootTree);
-	summ = Summ(mass);
+	int summ = Summ(mass, size);
 	//printf("%d\n",summ);
 	Encode(rootTree, fileout, filein, summ);
 

@@ -1,4 +1,4 @@
-#include "Biblio.h"
+#include "tree.h"
 #include <assert.h>
 
 TreeNode* CreateNote1(int k, int c)
@@ -23,7 +23,10 @@ TreeNode* GoRight(TreeNode* a)
 
 TreeNode* AddLeft(TreeNode* x, TreeNode* root)
 {
-	if (!root) return x;
+	if (!root) {
+		// DANGER
+		return x;
+	}
 	root->left = x;
 	x->prev = root;
 	return root;

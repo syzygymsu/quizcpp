@@ -1,30 +1,31 @@
-#include "Biblio.h"
+#include "make_tree.h"
+#include "tree.h"
 #include <stdlib.h>
 #include <assert.h>
-#include <stdio.h>
+#include <cstdio>
 
-typedef struct _buf {
+struct Buf {
 	int counter;
 	int byte;
 	FILE* f;
-} Buf;
+};
 
-typedef struct _List5 {
+struct List5 {
 	int nomer;
 	char* mass;
-	struct _List5* prev, * next;
-} List5;
+	List5 *next;
+};
 
 
-static void FilePrintZagolovok(int* mass, FILE* f)
+static void FilePrintZagolovok(int* mass, FILE* f, int size)
 {
-	fwrite(mass, 4, 256, f);
+	fwrite(mass, 4, size, f);
 }
 
 static void addnextL5(List5* root, List5* newelem)
 {
-	if (root->next != NULL) { root->next->prev = newelem; }
-	newelem->prev = root;
+	// if (root->next != NULL) { root->next->prev = newelem; }
+	// newelem->prev = root;
 	newelem->next = root->next;
 	root->next = newelem;
 }
@@ -40,7 +41,7 @@ static void Left_Right2(TreeNode* pos, void(*f)(TreeNode*, List5*), List5* root)
 
 static void func(TreeNode* pos, List5* root)
 {
-	char a[256];
+	char a[256]; // why size == 256
 	List5* c1;
 	char* mass;
 	TreeNode* b;
@@ -66,7 +67,7 @@ static void func(TreeNode* pos, List5* root)
 	mass[i] = 2;
 	c1 = (List5*)malloc(sizeof(List5));
 	assert(c1);
-	c1->prev = c1->next = NULL;
+	c1->next = nullptr;
 	c1->mass = mass;
 	c1->nomer = pos->value.nomer;
 	addnextL5(root, c1);
@@ -78,34 +79,33 @@ static List5* MakeList5(TreeNode* rootTree)
 	List5* root;
 	root = (List5*)malloc(sizeof(List5));
 	assert(root);
-	root->next = root->prev = NULL;
+	root->next = nullptr;
 	root->nomer = 999;
 	Left_Right2(rootTree, func, root);
 	return root;
 }
 
 
-static void MakeMass(const char* t1, int* numb)
+static void MakeMass(const char* t1, int* numb, int size)
 {
+	//clean Mass
+	for (int i = 0; i < size; i++)
+	{
+		numb[i] = 0;
+	}
+
 	FILE* file;
-	int summ = 0, c, i;
 
 	if ((file = fopen(t1, "r")) == NULL)
 	{
 		perror(t1);
 		return;
 	}
-	//clean Mass
-	for (i = 0; i < 256; i++)
-	{
-		numb[i] = 0;
-	}
 	//pods4et
 	for (;;)
 	{
-		c = getc(file);
+		int c = getc(file);
 		if (c == EOF) break;
-		summ++;
 		(numb[c])++;
 	}
 	fclose(file);
@@ -141,7 +141,7 @@ static char* Search(int c, List5* root)
 	return s->mass;
 }
 
-static void FileOut(List5* root5, const char* in, const char* out, int* mass)
+static void FileOut(List5* root5, const char* in, const char* out, int* mass, int size)
 {
 	int c;
 	char* s;
@@ -161,7 +161,7 @@ static void FileOut(List5* root5, const char* in, const char* out, int* mass)
 	buffer.byte = 0;
 	buffer.counter = 0;
 
-	FilePrintZagolovok(mass, buffer.f);
+	FilePrintZagolovok(mass, buffer.f, size);
 
 	for (;;)
 	{
@@ -182,22 +182,21 @@ static void FileOut(List5* root5, const char* in, const char* out, int* mass)
 	fclose(buffer.f);
 }
 
-void FileCode(const char* t1, const char* t2)
+void FileCode(const char* in, const char* out)
 {
-	TreeNode* rootTree = NULL;
-	List5* root5 = NULL;
-	int numb[256];
-	MakeMass(t1, numb);
-	rootTree = MakeTreeFromArray(numb);
+	constexpr int size = 256;
+	int numb[size];
+	MakeMass(in, numb, size);
+	TreeNode* rootTree = MakeTreeFromArray(numb, size);
 	if (rootTree != NULL)
 	{
-		root5 = MakeList5(rootTree);
-		FileOut(root5, t1, t2, numb);
+		List5* root5 = MakeList5(rootTree);
+		FileOut(root5, in, out, numb, size);
 		DelTree(rootTree);
 	}
 	else
 	{
-		FileOut(root5, t1, t2, numb);
+		FileOut(nullptr, in, out, numb, size);
 		//printf ("Error on open file or file is empty ");
 	}
 }

@@ -1,15 +1,14 @@
-#ifndef __BIBLIO_H__
-#define __BIBLIO_H__
+#ifndef __TREE_H__
+#define __TREE_H__
 
-typedef struct Ls {
+struct NodeValue {
 	int kolvo, nomer;
-} Type1;
+};
 
-
-typedef struct Tr {
-	Type1 value;
-	struct Tr* prev, * left, * right;
-} TreeNode;
+struct TreeNode {
+	NodeValue value;
+	TreeNode* prev, * left, * right;
+};
 
 TreeNode* CreateNote1(int, int);
 TreeNode* AddLeft(TreeNode*, TreeNode*);
@@ -21,9 +20,6 @@ void Left_Right1(TreeNode*, void(*f)(TreeNode*));
 void Down_Up(TreeNode* pos, void(*f)(TreeNode*));
 void DelTree(TreeNode*);
 
-TreeNode* MakeTreeFromArray(int* numb);
+// TreeNode* MakeTreeFromArray(int* numb);
 
-void DecodeFileOut(const char*, const char*);
-void FileCode(const char*, const char*);
-
-#endif // !__BIBLIO_H__
+#endif // !__TREE_H__
