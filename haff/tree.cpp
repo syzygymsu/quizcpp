@@ -1,12 +1,9 @@
 #include "Biblio.h"
-#include <stdlib.h>
 #include <assert.h>
 
 TreeNode* CreateNote1(int k, int c)
 {
-	TreeNode* a;
-	a = (TreeNode*)malloc(sizeof(TreeNode));
-	assert(a);
+	TreeNode* a = new TreeNode;
 	a->value.kolvo = k;
 	a->value.nomer = c;
 	a->prev = a->left = a->right = NULL;
@@ -59,9 +56,8 @@ void Down_Up(TreeNode* pos, void(*f)(TreeNode*))
 
 static void FreeSpase(TreeNode* a)
 {
-	free(a);
+	delete a;
 }
-
 
 void DelTree(TreeNode* root)
 {
