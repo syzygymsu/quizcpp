@@ -10,7 +10,7 @@ typedef struct Ls{
 
 
 typedef struct Tr {
-		Type1 *value;
+		Type1 value;
 		struct Tr *prev, *left, *right;
 } TreeNode;
 
@@ -68,7 +68,6 @@ TreeNode * MakeTree(List* root);
 List5 *MakeList5(TreeNode *);
 ////void FileOut(List5*,char*,char*,int*);
 void EncodeFileOut(char*,char*);
-int PrintList5(List5*);
 
 void FileCode(char*,char*);
 

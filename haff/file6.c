@@ -1,97 +1,93 @@
 #include "Biblio.h"
-static void addBit(Buf* buffer, int symb){
-    if(symb == 0)
-    {
-	buffer->byte = buffer->byte<<1;
-	
-    } 
-    else 
-    {
-	buffer->byte = (((buffer->byte)<<1)|1);
+static void addBit(Buf* buffer, int symb) {
+	if (symb == 0)
+	{
+		buffer->byte = buffer->byte << 1;
+	}
+	else
+	{
+		buffer->byte = (((buffer->byte) << 1) | 1);
 	}
 	buffer->counter++;
-    if (buffer->counter == 8 ) 
-    {
-	fwrite(&buffer->byte, 1, 1 , buffer->f);
-	buffer->counter = 0;
-	buffer->byte = 0;
-    }
+	if (buffer->counter == 8)
+	{
+		fwrite(&buffer->byte, 1, 1, buffer->f);
+		buffer->counter = 0;
+		buffer->byte = 0;
+	}
 }
 
-static char * Search(int c, List5 *root)
+static char* Search(int c, List5* root)
 {
-	List5 *s;
-	List5 *cur;
-	cur=root->next;
-	while (cur->nomer!=c) cur=cur->next;
-	s=cur;
+	List5* s;
+	List5* cur;
+	cur = root->next;
+	while (cur->nomer != c) cur = cur->next;
+	s = cur;
 	return s->mass;
 }
 
-static void FileOut(List5 * root5, char *t1, char *t2, int *mass)
-{	
+static void FileOut(List5* root5, char* t1, char* t2, int* mass)
+{
 	int c;
-	char * s;
-	int i=0;
-	FILE *filein;//,*fileout;
-	Buf *buffer;
-	buffer=(Buf*)malloc(sizeof(Buf));
-	if ((filein = fopen (t1,"rb"))== NULL)
+	char* s;
+	FILE* filein;
+	Buf buffer;
+	if ((filein = fopen(t1, "rb")) == NULL)
 	{
-	   perror (t2);
-	   return;
+		perror(t2);
+		return;
 	}
-	if ((buffer->f = fopen (t2,"wb"))== NULL)
+	if ((buffer.f = fopen(t2, "wb")) == NULL)
 	{
-	   perror (t2);
-	   fclose(filein);
-	   return;
+		perror(t2);
+		fclose(filein);
+		return;
 	}
-	buffer->byte=0;
-	buffer->counter=0;
+	buffer.byte = 0;
+	buffer.counter = 0;
 
-	FilePrintZagolovok(mass,buffer->f);
+	FilePrintZagolovok(mass, buffer.f);
 
-	for(;;)
+	for (;;)
 	{
 		c = getc(filein);
-		if(c==EOF) break;
-		s=Search(c,root5);
-		while (s[i] != 2)
+		if (c == EOF) break;
+		s = Search(c, root5);
+		while (*s != 2) // what is 2?
 		{
-	       		addBit(buffer, *s);
-				s++;
+			addBit(&buffer, *s);
+			s++;
 		}
 	}
 	fclose(filein);
-	while(buffer->counter!=0)
+	while (buffer.counter != 0)
 	{
-		addBit(buffer,0);
+		addBit(&buffer, 0);
 	}
-	fclose(buffer->f);
-	free(buffer);
+	fclose(buffer.f);
 }
 
-void FileCode(char  *t1, char  *t2)
+void FileCode(char* t1, char* t2)
 {
-	TreeNode * rootTree=NULL;
-	List *root;
-	List5 *root5=NULL;
+	TreeNode* rootTree = NULL;
+	List* root;
+	List5* root5 = NULL;
 	int numb[257];
-	MakeMass(t1,numb);
-	root=ListMake(numb);
+	MakeMass(t1, numb);
+	root = ListMake(numb);
 	//PrintList(root);
-	if (root->next!=NULL)
+	if (root->next != NULL)
 	{
-		rootTree=MakeTree(root);
+		rootTree = MakeTree(root);
 		//PrintTree(rootTree);
-		root5=MakeList5(rootTree);
-		FileOut(root5,t1,t2,numb);
+		root5 = MakeList5(rootTree);
+		FileOut(root5, t1, t2, numb);
 		DelTree(rootTree);
 	}
-	else 
-	{	
-		FileOut(root5,t1,t2,numb);
+	else
+	{
+		FileOut(root5, t1, t2, numb);
 		//printf ("Error on open file or file is empty ");
 	}
 }

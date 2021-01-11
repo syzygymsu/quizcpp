@@ -5,9 +5,8 @@ TreeNode* CreateNote1(int k, int c)
 	TreeNode* a;
 	a = (TreeNode*)malloc(sizeof(TreeNode));
 	assert(a);
-	a->value = (Type1*)malloc(sizeof(Type1));
-	a->value->kolvo = k;
-	a->value->nomer = c;
+	a->value.kolvo = k;
+	a->value.nomer = c;
 	a->prev = a->left = a->right = NULL;
 	return a;
 }
@@ -39,8 +38,8 @@ TreeNode* AddRight(TreeNode* x, TreeNode* root)
 }
 int cmp(TreeNode* x1, TreeNode* x2)
 {
-	if (x1->value->kolvo < x2->value->kolvo) return -1;
-	if (x1->value->kolvo == x2->value->kolvo) return 0;
+	if (x1->value.kolvo < x2->value.kolvo) return -1;
+	if (x1->value.kolvo == x2->value.kolvo) return 0;
 	return 1;
 }
 

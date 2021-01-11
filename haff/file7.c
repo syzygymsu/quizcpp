@@ -44,7 +44,7 @@ static void Encode(TreeNode* root, FILE * fileout, FILE *filein, int summ)
 
 		if(!(GoLeft(list)||GoRight(list)))
 		{
-			fwrite(&list->value->nomer,1,1,fileout);
+			fwrite(&list->value.nomer,1,1,fileout);
 			list=root;
 			i++;
 			//break;

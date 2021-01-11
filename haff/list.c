@@ -79,7 +79,7 @@ TreeNode* MakeTree(List* root)
 	if (movenext(movenext(root)) == NULL)
 	{
 
-		c1 = CreateNote1(root->next->value->value->kolvo, root->next->value->value->nomer);
+		c1 = CreateNote1(root->next->value->value.kolvo, root->next->value->value.nomer);
 		AddLeft(c1, root->next->value);
 
 		return root->next->value;
@@ -90,7 +90,7 @@ TreeNode* MakeTree(List* root)
 		BubbleSort(root, cmp);
 		a = delnext(root);
 		b = delnext(root);
-		c1 = CreateNote1(a->value->value->kolvo + b->value->value->kolvo, 0);
+		c1 = CreateNote1(a->value->value.kolvo + b->value->value.kolvo, 0);
 		c = createnote(c1);
 		AddLeft(a->value, c->value);
 		AddRight(b->value, c->value);
