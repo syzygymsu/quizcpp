@@ -59,20 +59,20 @@ static void Encode(TreeNode* root, FILE* fileout, FILE* filein, int summ)
 	}
 }
 
-void DecodeFileOut(char* t1, char* t2)
+void DecodeFileOut(const char* out, const char* in)
 {
 	int summ;
 	int mass[256];
 	FILE* fileout, * filein;
 	TreeNode* rootTree = NULL;
-	if ((fileout = fopen(t1, "w")) == NULL)
+	if ((fileout = fopen(out, "w")) == NULL)
 	{
-		perror(t1);
+		perror(out);
 		return;
 	}
-	if ((filein = fopen(t2, "r")) == NULL)
+	if ((filein = fopen(in, "r")) == NULL)
 	{
-		perror(t2);
+		perror(in);
 		fclose(fileout);
 		return;
 	}

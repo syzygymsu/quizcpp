@@ -85,7 +85,7 @@ static List5* MakeList5(TreeNode* rootTree)
 }
 
 
-static void MakeMass(char* t1, int* numb)
+static void MakeMass(const char* t1, int* numb)
 {
 	FILE* file;
 	int summ = 0, c, i;
@@ -141,20 +141,20 @@ static char* Search(int c, List5* root)
 	return s->mass;
 }
 
-static void FileOut(List5* root5, char* t1, char* t2, int* mass)
+static void FileOut(List5* root5, const char* in, const char* out, int* mass)
 {
 	int c;
 	char* s;
 	FILE* filein;
 	Buf buffer;
-	if ((filein = fopen(t1, "rb")) == NULL)
+	if ((filein = fopen(in, "rb")) == NULL)
 	{
-		perror(t2);
+		perror(in);
 		return;
 	}
-	if ((buffer.f = fopen(t2, "wb")) == NULL)
+	if ((buffer.f = fopen(out, "wb")) == NULL)
 	{
-		perror(t2);
+		perror(out);
 		fclose(filein);
 		return;
 	}
@@ -182,7 +182,7 @@ static void FileOut(List5* root5, char* t1, char* t2, int* mass)
 	fclose(buffer.f);
 }
 
-void FileCode(char* t1, char* t2)
+void FileCode(const char* t1, const char* t2)
 {
 	TreeNode* rootTree = NULL;
 	List5* root5 = NULL;

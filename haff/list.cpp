@@ -1,5 +1,4 @@
 #include "Biblio.h"
-#include <stdlib.h>
 #include <assert.h>
 
 typedef struct _List {
@@ -9,9 +8,7 @@ typedef struct _List {
 
 static List* createnote(TreeNode* n)
 {
-	List* a;
-	a = malloc(sizeof(List));
-	assert(a);
+	List* a = new List;
 	a->value = n;
 	a->prev = NULL;
 	a->next = NULL;
