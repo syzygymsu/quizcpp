@@ -3,7 +3,7 @@
 
 static void PrintElem(TreeNode* a)
 {
-	if (a == NULL) std::printf("ERROR");
+	if (a == nullptr) std::printf("ERROR");
 	else std::printf("%d %d\n", a->value.kolvo, a->value.nomer);
 }
 

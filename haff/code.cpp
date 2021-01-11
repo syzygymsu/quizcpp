@@ -2,76 +2,89 @@
 #include "tree.h"
 #include <cstdio>
 #include <vector>
+#include <functional>
 
 struct Buf {
+	Buf() : counter(0), byte(0) {}
+	void addBit(bool symb) {
+		byte = (((byte) << 1) | (int)symb);
+		counter++;
+		if (counter == 8)
+		{
+			fwrite(&byte, 1, 1, f);
+			counter = 0;
+			byte = 0;
+		}
+	}
+
+	void flush() {
+		while (counter != 0)
+		{
+			addBit(0);
+		}
+	}
+	FILE* f;
+private:
 	int counter;
 	int byte;
-	FILE* f;
 };
 
-struct List5 {
-	List5(int size) : map(size) {}
-	void add(int nomer, std::vector<char> mass) {
+struct LetterIndexToBoolSequence {
+	LetterIndexToBoolSequence(int size) : map(size) {}
+	void add(int nomer, std::vector<bool> mass) {
 		map[nomer] = mass;
 	}
-	std::vector<char> get(int nomer) {
-		return map[nomer];
+
+	void foreach(int nomer, std::function<void(bool)> f) const {
+		for (bool b : map[nomer]) {
+			f(b);
+		}
 	}
 private:
-	std::vector<std::vector<char>> map;
+	std::vector<std::vector<bool>> map;
 };
 
+
+static void Left_RightChildrens(TreeNode* pos, std::function<void(TreeNode*, std::vector<bool>)> f, std::vector<bool> path)
+{
+	if (pos == NULL) return;
+	if (!GoLeft(pos) && !GoRight(pos)) {
+		f(pos, path);
+	}
+	else {
+		path.push_back(false);
+		Left_RightChildrens(GoLeft(pos), f, path);
+		path.pop_back();
+		path.push_back(true);
+		Left_RightChildrens(GoRight(pos), f, path);
+	}
+}
 
 static void FilePrintZagolovok(int* mass, FILE* f, int size)
 {
 	fwrite(mass, 4, size, f);
 }
 
-
-static void Left_Right2(TreeNode* pos, void(*f)(TreeNode*, List5*), List5* root)
-{
-	if (pos == NULL) return;
-	Left_Right2(GoLeft(pos), f, root);
-	f(pos, root);
-	Left_Right2(GoRight(pos), f, root);
-}
-
-
-static void func(TreeNode* pos, List5* root)
-{
-	char a[256]; // why size == 256
-	TreeNode* b;
-	int i = 0, j;
-	if (pos->left || pos->right) return;
-	if (pos->prev == NULL) { a[0] = 1; i++; }
-	b = pos;
-	while (b->prev != NULL)
-	{
-
-		if (b->prev->right == b) a[i] = 1;
-		else a[i] = 0;
-		i++;
-		b = b->prev;
+struct Walker {
+	Walker(LetterIndexToBoolSequence& _root) : root(_root) {}
+	void operator()(TreeNode* node, std::vector<bool> path) {
+		root.add(node->value.nomer, path);
 	}
-	std::vector<char> mass(i); // TODO leak
-	for (j = 0; j < i; j++)
-	{
-		mass[j] = a[i - j - 1];
-	}
-	root->add(pos->value.nomer, mass);
-}
+private:
+	LetterIndexToBoolSequence& root;
+};
 
-static List5 MakeList5(TreeNode* rootTree, int size)
+static LetterIndexToBoolSequence MakeLetterIndexToBoolSequence(TreeNode* rootTree, int size)
 {
-	List5 root(size);
-	Left_Right2(rootTree, func, &root);
+	LetterIndexToBoolSequence root(size);
+	Walker walker(root);
+	Left_RightChildrens(rootTree, walker, {});
 	return root;
 }
 
-
 static void MakeMass(const char* t1, int* numb, int size)
 {
-	//clean Mass
+	//clean
 	for (int i = 0; i < size; i++)
 	{
 		numb[i] = 0;
@@ -84,7 +97,7 @@ static void MakeMass(const char* t1, int* numb, int size)
 		perror(t1);
 		return;
 	}
-	//pods4et
+	// counting
 	for (;;)
 	{
 		int c = getc(file);
@@ -95,27 +108,7 @@ static void MakeMass(const char* t1, int* numb, int size)
 
 }
 
-
-static void addBit(Buf* buffer, int symb) {
-	if (symb == 0)
-	{
-		buffer->byte = buffer->byte << 1;
-	}
-	else
-	{
-		buffer->byte = (((buffer->byte) << 1) | 1);
-	}
-	buffer->counter++;
-	if (buffer->counter == 8)
-	{
-		fwrite(&buffer->byte, 1, 1, buffer->f);
-		buffer->counter = 0;
-		buffer->byte = 0;
-	}
-}
-
-
-static void FileOut(List5* root5, const char* in, const char* out, int* mass, int size)
+static void FileOut(const LetterIndexToBoolSequence* root, const char* in, const char* out, int* mass, int size)
 {
 	FILE* filein;
 	Buf buffer;
@@ -130,8 +123,6 @@ static void FileOut(List5* root5, const char* in, const char* out, int* mass, in
 		fclose(filein);
 		return;
 	}
-	buffer.byte = 0;
-	buffer.counter = 0;
 
 	FilePrintZagolovok(mass, buffer.f, size);
 
@@ -139,16 +130,10 @@ static void FileOut(List5* root5, const char* in, const char* out, int* mass, in
 	{
 		int c = getc(filein);
 		if (c == EOF) break;
-		std::vector vec = root5->get(c);
-		for (char ch : vec) {
-			addBit(&buffer, ch);
-		}
+		root->foreach(c, [&buffer](bool b) { buffer.addBit(b); });		
 	}
 	fclose(filein);
-	while (buffer.counter != 0)
-	{
-		addBit(&buffer, 0);
-	}
+	buffer.flush();
 	fclose(buffer.f);
 }
 
@@ -160,13 +145,12 @@ void FileCode(const char* in, const char* out)
 	TreeNode* rootTree = MakeTreeFromArray(numb, size);
 	if (rootTree != nullptr)
 	{
-		List5 root5 = MakeList5(rootTree, size);
+		LetterIndexToBoolSequence root5 = MakeLetterIndexToBoolSequence(rootTree, size);
 		FileOut(&root5, in, out, numb, size);
 		DelTree(rootTree);
 	}
 	else
 	{
 		FileOut(nullptr, in, out, numb, size);
-		//printf ("Error on open file or file is empty ");
 	}
 }

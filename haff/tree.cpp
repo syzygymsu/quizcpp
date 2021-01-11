@@ -6,8 +6,13 @@ TreeNode* CreateNote1(int k, int c)
 	TreeNode* a = new TreeNode;
 	a->value.kolvo = k;
 	a->value.nomer = c;
-	a->prev = a->left = a->right = NULL;
+	a->left = a->right = nullptr;
 	return a;
+}
+
+static void FreeSpase(TreeNode* a)
+{
+	delete a;
 }
 
 TreeNode* GoLeft(TreeNode* a)
@@ -28,25 +33,18 @@ TreeNode* AddLeft(TreeNode* x, TreeNode* root)
 		return x;
 	}
 	root->left = x;
-	x->prev = root;
+	// x->prev = root;
 	return root;
 }
 TreeNode* AddRight(TreeNode* x, TreeNode* root)
 {
 	assert(root);
 	root->right = x;
-	x->prev = root;
+	// x->prev = root;
 	return root;
 }
 
 //obhody
-void Left_Right1(TreeNode* pos, void(*f)(TreeNode*))
-{
-	if (pos == NULL) return;
-	Left_Right1(GoLeft(pos), f);
-	f(pos);
-	Left_Right1(GoRight(pos), f);
-}
 
 void Down_Up(TreeNode* pos, void(*f)(TreeNode*))
 {
@@ -57,10 +55,6 @@ void Down_Up(TreeNode* pos, void(*f)(TreeNode*))
 }
 
 
-static void FreeSpase(TreeNode* a)
-{
-	delete a;
-}
 
 void DelTree(TreeNode* root)
 {
