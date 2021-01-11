@@ -1,4 +1,6 @@
 #include "Biblio.h"
+#include <stdlib.h>
+#include <assert.h>
 
 TreeNode* CreateNote1(int k, int c)
 {
@@ -36,12 +38,6 @@ TreeNode* AddRight(TreeNode* x, TreeNode* root)
 	x->prev = root;
 	return root;
 }
-int cmp(TreeNode* x1, TreeNode* x2)
-{
-	if (x1->value.kolvo < x2->value.kolvo) return -1;
-	if (x1->value.kolvo == x2->value.kolvo) return 0;
-	return 1;
-}
 
 //obhody
 void Left_Right1(TreeNode* pos, void(*f)(TreeNode*))
@@ -61,8 +57,7 @@ void Down_Up(TreeNode* pos, void(*f)(TreeNode*))
 }
 
 
-
-void FreeSpase(TreeNode* a)
+static void FreeSpase(TreeNode* a)
 {
 	free(a);
 }

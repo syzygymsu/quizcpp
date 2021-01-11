@@ -1,9 +1,17 @@
 #include "Biblio.h"
+#include <stdlib.h>
+#include <assert.h>
 
-List* createnote(TreeNode* n)
+typedef struct _List {
+	TreeNode* value;
+	struct _List* prev, * next;
+} List;
+
+static List* createnote(TreeNode* n)
 {
 	List* a;
 	a = malloc(sizeof(List));
+	assert(a);
 	a->value = n;
 	a->prev = NULL;
 	a->next = NULL;
@@ -11,7 +19,7 @@ List* createnote(TreeNode* n)
 }
 
 
-List* addnext(List* cur, List* newelem)
+static List* addnext(List* cur, List* newelem)
 {
 	if (cur->next != NULL) { cur->next->prev = newelem; }
 	newelem->prev = cur;
@@ -21,7 +29,7 @@ List* addnext(List* cur, List* newelem)
 }
 
 
-List* delnext(List* cur)
+static List* delnext(List* cur)
 {
 	List* b;
 	assert(cur);
@@ -34,20 +42,26 @@ List* delnext(List* cur)
 	return b;
 }
 
-List* movenext(List* cur)
+static List* movenext(List* cur)
 {
 	assert(cur);
 	return cur->next;
 }
 
-List* moveprev(List* cur)
+static List* moveprev(List* cur)
 {
 	assert(cur);
 	return (cur->prev);
 }
 
+static int cmp(TreeNode* x1, TreeNode* x2)
+{
+	if (x1->value.kolvo < x2->value.kolvo) return -1;
+	if (x1->value.kolvo == x2->value.kolvo) return 0;
+	return 1;
+}
 
-void BubbleSort(List* root, int(*sort)(TreeNode*, TreeNode*))
+static void BubbleSort(List* root, int(*sort)(TreeNode*, TreeNode*))
 {
 	int p, s = 1;
 	List* a;
@@ -71,8 +85,7 @@ void BubbleSort(List* root, int(*sort)(TreeNode*, TreeNode*))
 }
 
 
-
-TreeNode* MakeTree(List* root)
+static TreeNode* MakeTree(List* root)
 {
 	List* a, * b, * c = NULL;
 	TreeNode* c1;
@@ -98,7 +111,37 @@ TreeNode* MakeTree(List* root)
 		addnext(root, c);
 
 	}
-
+	assert(c);
 	return c->value;
 }
 
+static List* ListMake(int* numb)
+{
+	List* list = NULL, * cc, * root;
+	int  k = 1, i;
+	TreeNode* c1 = NULL;
+
+
+	root = createnote(c1);
+	list = root;
+	for (i = 0; i < 256; i++)
+	{
+		if (numb[i] > 0)
+		{
+			k = numb[i];
+			c1 = CreateNote1(k, i);
+			cc = createnote(c1);
+			list = addnext(list, cc);
+		}
+	}
+	return root;
+}
+
+
+TreeNode* MakeTreeFromArray(int* numb) {
+	List* list = ListMake(numb);
+	TreeNode* rootTree = NULL;
+	if (list->next != NULL)
+		rootTree = MakeTree(list);
+	return rootTree;
+}
