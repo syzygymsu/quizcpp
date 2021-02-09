@@ -7,5 +7,9 @@ int main()
 	if (!res) {
 		return 1;
 	}
+	res = test(hirsh_extra_space);
+	if (!res) {
+		return 1;
+	}
 	return 0;
 }

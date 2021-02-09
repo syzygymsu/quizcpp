@@ -8,7 +8,7 @@ int hirsh(std::vector<int>& v) {
 	while (true) {
 		auto mid = begin + (end - begin) / 2;
 		if (end - begin <= 0) {
-			return v.end() - mid;
+			return static_cast<int>(v.end() - mid);
 		}
 		std::nth_element(begin, mid, end);
 		int mid_el = *mid;
