@@ -13,13 +13,56 @@ bool check(int * v) {
     f[5] = v[0] + v[3] + v[4] + v[7];
     std::sort(f, f+6);
     for (int i = 1; i < 6; ++i) {
-        if (f[i] != f[i - 1]) {
+        if (f[i] == f[i - 1]) {
             return false;
         }
     }
     return true;
 }
 
+void swap(int* v, int i, int j)
+{
+    int temp;
+    temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+}
+
+int globalCount = 0;
+
+void print(int* v, int n) {
+    for (int i = 0; i < n; ++i) {
+        std::cout << v[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+void HeapPermute(int* v, int n)
+{
+    // Print the sequence if the heap top reaches to the 1.
+    if (n == 1) {
+        bool res = check(v);
+        if (res) {
+            ++globalCount;
+        }
+    }
+    else
+    {
+        // Fix a number at the heap top until only two one element remaining and permute remaining.
+        for (int i = 0; i < n; i++)
+        {
+            HeapPermute(v, n - 1);
+            // If odd then swap the value at the start index with the n-1.
+            if (n % 2 == 1) {
+                swap(v, 0, n - 1);
+            }
+            // If even then swap the value at the 'i' index with the n-1.
+            else {
+                swap(v, i, n - 1);
+            }
+        }
+    }
+}
 
 int main1(int argc, char* argv[])
 {
@@ -48,54 +91,12 @@ int main1(int argc, char* argv[])
     return 0;
 }
 
-void swap(int* x, int* y)
-{
-    int temp;
-    temp = *x;
-    *x = *y;
-    *y = temp;
-}
-
-int globalCount = 0;
-
-void print(int* v, int n) {
-    for (int i = 0; i < n; ++i) {
-        std::cout << v[i] << " ";
-    }
-    std::cout << std::endl;
-}
-
-void HeapPermute(int* v, int n)
-{
-    int i;
-    // Print the sequence if the heap top reaches to the 1.
-    if (n == 1) {
-        bool res = check(v);
-        if (res) {
-            print(v, 8);
-            ++globalCount;
-            // std::cout << "OK" <<" ";
-            
-        }
-    }
-    else
-    {
-        // Fix a number at the heap top until only two one element remaining and permute remaining.
-        for (i = 0; i < n; i++)
-        {
-            HeapPermute(v, n - 1);
-            // If odd then swap the value at the start index with the n-1.
-            if (n % 2 == 1)
-                swap(&v[0], &v[n - 1]);
-            // If even then swap the value at the 'i' index with the n-1.
-            else
-                swap(&v[i], &v[n - 1]);
-        }
-    }
-}
 
 int main() {
-    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    int arr[8];
+    for (int i = 0; i < 8; ++i) {
+        arr[i] = i + 1;
+    }
     print(arr, 8);
     HeapPermute(arr, 8);
     std::cout << globalCount << std::endl;
