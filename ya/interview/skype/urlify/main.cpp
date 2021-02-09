@@ -3,27 +3,36 @@
 #include <string_view>
 #include <cassert>
 #include <vector>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include <cassert>
-#include <vector>
 #include <algorithm>
 #include <unordered_map>
+
+/*
+Написать метод, который заменит все пробелы в строке на "%20" inplace.
+На вход подается строка с зарезервированными под расширение символами
+(гарантируется, что resize до разумных размеров не будет аллоцировать память).
+
+void urlify(std::string& s);
+
+std::string s0 = "my url";
+s0.reserve(20);
+urlify(s0);
+assert(s0 == "my%20url");
+*/
+
 
 using namespace std;
 
 void urlify(std::string& s) {
-    int spaceCount = 0;
+    size_t spaceCount = 0;
     for (char c : s) {
         if (c == ' ') {
             ++spaceCount;
         }
     }
-    int oldSize = s.size();
-    int currIndex = s.size() + spaceCount * 2;
+    size_t oldSize = s.size();
+    size_t currIndex = s.size() + spaceCount * 2;
     s.resize(currIndex);
-    for (int i = oldSize - 1; i >= 0; --i) {
+    for (int i = static_cast<int>(oldSize) - 1; i >= 0; --i) {
         char c = s[i];
         if (c != ' ') {
             s[--currIndex] = c;

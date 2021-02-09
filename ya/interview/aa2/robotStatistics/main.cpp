@@ -11,9 +11,9 @@ public:
     void onEvent(time_t now, int userId);
     int getRobotCount(time_t now);
 private:
-    void removeOld(int now);
+    void removeOld(time_t now);
     std::unordered_map<int, int> usersToCount;
-    std::queue<std::pair<int, int>> q;
+    std::queue<std::pair<time_t, int>> q;
     int threshold;
     int time_limit;
     int robot_count;
@@ -22,7 +22,7 @@ private:
 RobotStatistics::RobotStatistics(int _threshold, int _timelimit) 
     : threshold(_threshold), time_limit(_timelimit), robot_count(0) {}
 
-void RobotStatistics::removeOld(int now) {
+void RobotStatistics::removeOld(time_t now) {
     while (!q.empty()) {
         auto& elem = q.front();
         if (elem.first + time_limit < now) {

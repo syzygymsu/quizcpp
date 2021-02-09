@@ -14,7 +14,7 @@
 
 struct VectorHasher {
     int operator()(const std::vector<int>& V) const {
-        int hash = V.size();
+        int hash = static_cast<int>(V.size());
         for (auto& i : V) {
             hash ^= i + 0x9e3779b9 + (hash << 6) + (hash >> 2);
         }
