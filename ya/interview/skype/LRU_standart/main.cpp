@@ -34,12 +34,12 @@ public:
             updatePosition(key, value);
         }
         else {
-            cache.push_front(std::make_pair(key, value));
-            m[key] = cache.begin();
-            if (m.size() > capacity) {
+            if (m.size() >= capacity) {
                 m.erase(cache.back().first);
                 cache.pop_back();
             }
+            cache.push_front(std::make_pair(key, value));
+            m[key] = cache.begin();
         }
     }
 };
