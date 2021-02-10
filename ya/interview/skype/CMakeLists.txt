@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 
 add_subdirectory("anagrams")
+add_subdirectory("BFS")
 add_subdirectory("exitOrFence")
 add_subdirectory("LRU")
 add_subdirectory("LRU_standart")
