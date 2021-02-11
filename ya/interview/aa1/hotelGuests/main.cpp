@@ -23,8 +23,8 @@ size_t maxGuests(const std::vector<std::pair<int, int>>& segments) {
         merge(map, segment.first, 1);
         merge(map, segment.second, -1);
     }
-    int max = 0;
-    int summ = 0;
+    size_t max = 0;
+    size_t summ = 0;
     for (const auto& entry : map) {
         summ += entry.second;
         max = std::max(summ, max);

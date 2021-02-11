@@ -6,6 +6,7 @@ project(${ProjectId})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 
+add_subdirectory("20210210")
 add_subdirectory("anagrams")
 add_subdirectory("BFS")
 add_subdirectory("exitOrFence")
