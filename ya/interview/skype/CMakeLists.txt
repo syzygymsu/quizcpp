@@ -8,6 +8,7 @@ set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 
 add_subdirectory("20210210")
 add_subdirectory("20210211")
+add_subdirectory("20210215")
 add_subdirectory("anagrams")
 add_subdirectory("BFS")
 add_subdirectory("exitOrFence")
