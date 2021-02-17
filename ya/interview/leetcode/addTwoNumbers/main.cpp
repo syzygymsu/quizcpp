@@ -28,7 +28,6 @@ public:
         ListNode* l1First = l1;
         while(true) {
             int sum = vUme + l1->val;
-            sum += l1->val;
             if (l2 != nullptr) {
                 sum += l2->val;
             }
