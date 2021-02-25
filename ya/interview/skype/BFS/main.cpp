@@ -9,11 +9,11 @@
 
 using namespace std;
 
-vector<int> bfs(int s, int to, int n, const vector < vector<int> >& g) {
-    queue<int> q;
+std::vector<int> bfs(int s, int toV, int n, const std::vector<std::vector<int> >& g) {
+    std::queue<int> q;
     q.push(s);
-    vector<bool> used(n);
-    vector<int> d(n), p(n);
+    std::vector<bool> used(n);
+    std::vector<int> d(n), p(n);
     used[s] = true;
     p[s] = -1;
     while (!q.empty()) {
@@ -29,18 +29,20 @@ vector<int> bfs(int s, int to, int n, const vector < vector<int> >& g) {
             }
         }
     }
-    if (!used[to]) {
+    if (!used[toV]) {
         cout << "No path!";
         return {};
     }
     else {
         vector<int> path;
-        for (int v = to; v != -1; v = p[v])
+        for (int v = toV; v != -1; v = p[v]) {
             path.push_back(v);
+        }
         reverse(path.begin(), path.end());
-        cout << "Path: ";
-        for (size_t i = 0; i < path.size(); ++i)
-            cout << path[i] + 1 << " ";
+        std::cout << "Path: ";
+        for (size_t i = 0; i < path.size(); ++i) {
+            std::cout << path[i] + 1 << " ";
+        }
         return path;
     }
 }
@@ -49,8 +51,9 @@ vector<int> bfs(int s, int to, int n, const vector < vector<int> >& g) {
 int main()
 {
     vector < vector<int> > g; // граф
-    int n; // число вершин
-    int s; // стартовая вершина (вершины везде нумеруются с нуля)
+    int n = 5; // число вершин
+    int s = 0; // стартовая вершина (вершины везде нумеруются с нуля)
+    bfs(s, n, n, g);
 
     return 0;
 }
