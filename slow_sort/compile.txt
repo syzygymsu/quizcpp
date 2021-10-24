@@ -1,0 +1,7 @@
+g++ -std=c++17 -nostdinc++ -I/var/build/llvm-build/include/c++/v1 -L/var/build/llvm-build/lib -Wl,-rpath,/var/build/llvm-build/lib \ run.cpp -nodefaultlibs -lc++ -lc++abi -lm -lc -lgcc_s -lgcc -O2 -o run
+
+Здесь используется реализация libc++ стандартной библиотеки (версия 10). Если у вас OS X Mavericks или новее, то вы можете компилировать как обычно (поскольку там она используется по умолчанию):
+
+g++ -std=c++17 -O2 slow_gen.cpp -o run
+
+(echo casul-sort; sleep 1; cat in.txt) | nc crashme.manytask.org 80
