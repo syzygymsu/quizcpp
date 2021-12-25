@@ -1,10 +1,5 @@
-#include <iostream>
 #include <string>
-#include <string_view>
 #include <cassert>
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
 
 /*
 Написать метод, который заменит все пробелы в строке на "%20" inplace.
@@ -20,8 +15,6 @@ assert(s0 == "my%20url");
 */
 
 
-using namespace std;
-
 void urlify(std::string& s) {
     size_t spaceCount = 0;
     for (char c : s) {
@@ -29,11 +22,11 @@ void urlify(std::string& s) {
             ++spaceCount;
         }
     }
-    size_t oldSize = s.size();
+    size_t last = s.size();
     size_t currIndex = s.size() + spaceCount * 2;
     s.resize(currIndex);
-    for (int i = static_cast<int>(oldSize) - 1; i >= 0; --i) {
-        char c = s[i];
+    while (spaceCount > 0) {
+        char c = s[--last];
         if (c != ' ') {
             s[--currIndex] = c;
         }
@@ -41,6 +34,7 @@ void urlify(std::string& s) {
             s[--currIndex] = '0';
             s[--currIndex] = '2';
             s[--currIndex] = '%';
+            --spaceCount;
         }
     }
 }
