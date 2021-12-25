@@ -1,5 +1,4 @@
 #include "hirsh.h"
-#include <vector>
 
 int hirsh_extra_space(const std::vector<int>& v) {
     std::vector<int> h(v.size() + 1);
@@ -8,14 +7,14 @@ int hirsh_extra_space(const std::vector<int>& v) {
             ++h[el];
         }
         else {
-            ++h[h.size() - 1];
+            ++h.back();
         }
     }
-    int summ = 0;
-    for (int i = static_cast<int>(h.size()) - 1; i >= 0; --i) {
-        summ += h[i];
-        if (summ >= i) {
-            return i;
+    size_t summ = 0;
+    for (size_t i = h.size(); i > 0; --i) {
+        summ += h[i-1];
+        if (summ >= i-1) {
+            return static_cast<int>(i-1);
         }
     }
     return 0;

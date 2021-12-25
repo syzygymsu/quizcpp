@@ -1,6 +1,5 @@
 #include "hirsh.h"
 #include <algorithm>
-#include <vector>
 
 int hirsh(std::vector<int>& v) {
 	auto begin = v.begin();
@@ -12,7 +11,7 @@ int hirsh(std::vector<int>& v) {
 		}
 		std::nth_element(begin, mid, end);
 		int mid_el = *mid;
-		if ((v.end() - mid == mid_el)) { // || (v.end() - mid - 1 == mid_el)) {
+		if (v.end() - mid == mid_el) {
 			return mid_el;
 		}
 		if (v.end() - mid < mid_el) {
