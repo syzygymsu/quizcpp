@@ -5,62 +5,66 @@ function getKey(point) {
     return point.x + "|" + point.y;
 }
 
-function wait_new_point(point, game) {
-    return game.state(point.x, point.y).then((res) => {
-        return {state: res, point: point};
-    });
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function helper(game, start) {
-    // const queue = [];
-    const waiter = [];
+    const queue = [];
     const visited = {};
-    waiter.push(wait_new_point(start, game));
-    // queue.push(start);
-    while (waiter.length !== 0) {
-        const cur_task = waiter.shift();
-        const cur_res = await cur_task;
-        const cur_point = cur_res.point;
-        if (visited[getKey(cur_point)]) {
+    const st = await game.state(start.x, start.y);
+    queue.push({point: start, state: st});
+    while (true) {
+        if (queue.length === 0) {
+            await sleep(200);
             continue;
         }
+        const cur_res = queue.shift();
+        const cur_point = cur_res.point;
         const res = cur_res.state;
         if (res.finish === true) {
             return cur_point;
         }
-        visited[getKey(cur_point)] = true;
+        const key_cur = getKey(cur_point);
+        if (visited[key_cur]) {
+            continue;
+        } else {
+            visited[key_cur] = true;
+        }
         if (res.top) {
             const cand_point = {x: cur_point.x, y: cur_point.y - 1};
             if (!visited[getKey(cand_point)]) {
-                const up_prom = game.up(cur_point.x, cur_point.y).then(() => wait_new_point(cand_point, game));
-                waiter.push(up_prom);
+                game.up(cur_point.x, cur_point.y)
+                    .then(() => game.state(cand_point.x, cand_point.y))
+                    .then((st) => queue.push({point: cand_point, state: st}));
             }
         }
         if (res.bottom) {
             const cand_point = {x: cur_point.x, y: cur_point.y + 1};
             if (!visited[getKey(cand_point)]) {
-                const down_prom = game.down(cur_point.x, cur_point.y).then(() => wait_new_point(cand_point, game));
-                waiter.push(down_prom);
+                game.down(cur_point.x, cur_point.y)
+                    .then(() => game.state(cand_point.x, cand_point.y))
+                    .then((st) => queue.push({point: cand_point, state: st}));
             }
         }
         if (res.left) {
             const cand_point = {x: cur_point.x - 1, y: cur_point.y};
             if (!visited[getKey(cand_point)]) {
-                const left_prom = game.left(cur_point.x, cur_point.y).then(() => wait_new_point(cand_point, game));
-                waiter.push(left_prom);
+                game.left(cur_point.x, cur_point.y)
+                    .then(() => game.state(cand_point.x, cand_point.y))
+                    .then((st) => queue.push({point: cand_point, state: st}));
             }
         }
         if (res.right) {
             const cand_point = {x: cur_point.x + 1, y: cur_point.y};
             if (!visited[getKey(cand_point)]) {
-                const right_prom = game.right(cur_point.x, cur_point.y).then(() => wait_new_point(cand_point, game));
-                waiter.push(right_prom);
+                game.right(cur_point.x, cur_point.y)
+                    .then(() => game.state(cand_point.x, cand_point.y))
+                    .then((st) => queue.push({point: cand_point, state: st}));
             }
         }
     }
-    return start;
 }
-
 
 // module.exports = function main(game, start) {
 //     return helper(game, start);
