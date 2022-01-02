@@ -20,10 +20,14 @@ def task(asks):
     return results
 
 
+def req(asks, connection):
+    headers=",".join(asks)
+    connection.request('MEW', '/', headers={'x-cat-variable': headers})
+    return connection.getresponse().headers.get_all('x-cat-value')
+
+
 def ask(asks, connection):
-    connection.request('MEW', '/', headers={'x-cat-variable': f'{asks[0]},{asks[1]}'})
-    values = connection.getresponse().headers.get_all('x-cat-value')
-    return set(values)
+    return set(req(asks, connection))
 
 def main():
     args = [""] * 4

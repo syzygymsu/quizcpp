@@ -30,7 +30,7 @@ Sleep
 Play
 
 
-https://github.com/redsun9/leetcode/blob/b1eeb4809e098d0bd2965cfbe16e855722e65426/src/yandex/cup2021/back/qual/problemA/Main.java
+https://github.com/redsun9/leetcode/blob/master/src/yandex/cup2021/back/qual/problemA/Main.java
 https://github.com/Flaiers/yandex-cup/blob/65ce2c447be954131acb6df5246a45a63791682c/qualifying/backend/first.py
 https://github.com/NeutralMike/ya_cup_21/blob/74a437811fccc361ff4abd1ce530196cbc84675c/backend/quals/A/A.py
 https://github.com/alatricta/YandexCup2021/blob/3bea8f96fb6636d03d7bc5c9cb14e6068d74898d/backend_A.py
