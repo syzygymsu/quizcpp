@@ -1,23 +1,12 @@
 import random
 from http.client import HTTPConnection
 
-def read_input():
-    import fileinput
-    asks = []
-    for line in fileinput.input():
-        asks.append(line.strip())
-        if len(asks) == 4:
-            return asks,
-
-
 def task(asks):
     results = [""] * 4
-    ask0, ask1, ask2, ask3 = asks
-
     connection = HTTPConnection(host='127.0.0.1', port=7777)
-    values01 = ask([ask0, ask1], connection)
-    values12 = ask([ask1, ask2], connection)
-    values13 = ask([ask1, ask3], connection)
+    values01 = ask([asks[0], asks[1]], connection)
+    values12 = ask([asks[1], asks[2]], connection)
+    values13 = ask([asks[1], asks[3]], connection)
     connection.close()
 
     if len(values01 & values12 & values13) != 1:
@@ -37,8 +26,10 @@ def ask(asks, connection):
     return set(values)
 
 def main():
-    args = read_input()
-    res = task(*args)
+    args = [""] * 4
+    for i in range(4):
+        args[i] = input()
+    res = task(args)
     print("\n".join(res))
 
 if __name__ == "__main__":
