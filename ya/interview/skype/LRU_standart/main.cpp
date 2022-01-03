@@ -1,37 +1,29 @@
-#include <iostream>
-
 #include <list>
 #include <unordered_map>
-#include <assert.h>
-
-// using namespace std;
+#include <cassert>
 
 template <class KEY_T, class VAL_T>
 class LRUCache {
-    int capacity;
-    std::list<std::pair<KEY_T, VAL_T>> cache;
-    std::unordered_map<KEY_T, decltype(cache.end())> m;
-
-    void updatePosition(KEY_T key, VAL_T value) {
-        cache.erase(m[key]);
-        cache.push_front(std::make_pair(key, value));
-        m[key] = cache.begin();
-    }
+    typedef typename std::unordered_map<KEY_T, typename std::list<std::pair<KEY_T, VAL_T>>::iterator>::iterator MapIter;
 public:
-    LRUCache(int _capacity) : capacity{ _capacity } {}
+    explicit LRUCache(size_t _capacity) : capacity{ _capacity } {
+        assert(capacity > 0);
+    }
 
     VAL_T get(KEY_T key) {
-        if (m.find(key) != m.end()) {
-            updatePosition(key, m[key]->second);
-            return m[key]->second;
+        auto it = m.find(key);
+        if (it != m.end()) {
+            updatePosition(it, it->second->second);
+            return it->second->second;
         }
         // throw std::runtime_error("No such key");
         return -1;
     }
 
     void add(KEY_T key, VAL_T value) {
-        if (m.find(key) != m.end()) {
-            updatePosition(key, value);
+        auto it = m.find(key);
+        if (it != m.end()) {
+            updatePosition(it, value);
         }
         else {
             if (m.size() >= capacity) {
@@ -42,6 +34,18 @@ public:
             m[key] = cache.begin();
         }
     }
+
+private:
+    void updatePosition(MapIter it, VAL_T value) {
+        cache.erase(it->second);
+        cache.push_front(std::make_pair(it->first, value));
+        it->second = cache.begin();
+    }
+
+private:
+    size_t capacity;
+    std::list<std::pair<KEY_T, VAL_T>> cache;
+    std::unordered_map<KEY_T, decltype(cache.end())> m;
 };
 
 int main()
