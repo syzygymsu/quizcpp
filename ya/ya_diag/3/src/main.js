@@ -16,7 +16,7 @@ async function helper(game, start) {
     queue.push({point: start, state: st});
     while (true) {
         if (queue.length === 0) {
-            await sleep(200);
+            await sleep(50);
             continue;
         }
         const cur_res = queue.shift();

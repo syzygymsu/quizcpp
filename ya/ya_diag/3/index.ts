@@ -10,13 +10,6 @@ const start = { x: 0, y: 0 };
 const finish = { x: WIDTH / 2, y: HEIGHT / 2 };
 
 let labyrinth = generateLabyrinth(WIDTH, HEIGHT, start, finish);
-
-const game = new Game(labyrinth, 100);
-
-main(game, start)
-    .then(({ x, y }) => x == finish.x && y == finish.y)
-    .then(console.log);
-
 // ---------------
 // UI
 // ---------------
@@ -30,6 +23,12 @@ requestAnimationFrame(renderLoop);
 function onDOMContentLoaded(): void {
     const onGenerateClick = () => {
         labyrinth = generateLabyrinth(WIDTH, HEIGHT, start, finish);
+        const game = new Game(labyrinth, 100);
+
+        main(game, start)
+            .then(({x, y}) => x == finish.x && y == finish.y)
+            .then(console.log);
+
     };
 
     document
