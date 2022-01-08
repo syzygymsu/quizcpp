@@ -1,12 +1,10 @@
 // problems/B/
 
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
 #include <cstdint>
-#include <limits>
 
 int64_t count(const std::unordered_map<int, int>& map, long T, int X) {
     int64_t c = 0;
@@ -21,14 +19,11 @@ void func(std::istream& f, std::ostream& out) {
     f >> n;
     f >> x;
     f >> k;
-    std::vector<int> t_list(n);
+    std::unordered_map<int, int> m_unique;
 
     for (int i = 0; i < n; ++i) {
-        f >> t_list[i];
-    }
-
-    std::unordered_map<int, int> m_unique;
-    for (int t : t_list) {
+        int t;
+        f >> t;
         int key = t % x;
         auto it = m_unique.find(key);
         if (it != m_unique.end()) {
@@ -40,7 +35,7 @@ void func(std::istream& f, std::ostream& out) {
     }
 
     int64_t left = 0;
-    int64_t right = std::numeric_limits<int64_t>::max();
+    int64_t right = 1e19;
     while (right > left) {
         int64_t mid = left + (right - left) / 2;
         int64_t c = count(m_unique, mid, x);
