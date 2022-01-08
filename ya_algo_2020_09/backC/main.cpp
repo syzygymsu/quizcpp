@@ -1,12 +1,20 @@
 // problems/B/
 
-// #include <iostream>
+#include <iostream>
 #include <fstream>
 #include <vector>
+#include <unordered_map>
 #include <algorithm>
+#include <cstdint>
+#include <limits>
 
-// using namespace std;
-
+int64_t count(const std::unordered_map<int, int>& map, long T, int X) {
+    int64_t c = 0;
+    for (const auto& ti : map) {
+        c += std::max((T - (long)ti.second + X) / X, 0L);
+    }
+    return c;
+}
 
 void func(std::istream& f, std::ostream& out) {
     int n, x, k;
@@ -19,32 +27,35 @@ void func(std::istream& f, std::ostream& out) {
         f >> t_list[i];
     }
 
-    std::sort(t_list.begin(), t_list.end());
-    std::vector<int> t_unique;
-    long t0 = 1e9 + 7;
-
+    std::unordered_map<int, int> m_unique;
     for (int t : t_list) {
-        if (t > t0) {
-            break;
+        int key = t % x;
+        auto it = m_unique.find(key);
+        if (it != m_unique.end()) {
+            it->second = std::min(it->second, t);
         }
-        int new_t = t % x;
-        auto it = std::lower_bound(t_unique.begin(), t_unique.end(), new_t);
-        if (it != t_unique.end() && *it == new_t) {
-            continue;
+        else {
+            m_unique[key] = t;
         }
-        t_unique.insert(it, new_t);
-        k += t / x;
-        int k1 = (k - 1) / t_unique.size();
-        int k2 = (k - 1) % t_unique.size();
-        t0 = (long)x * k1 + t_unique[k2];
     }
-    out << t0 << std::endl;
+
+    int64_t left = 0;
+    int64_t right = std::numeric_limits<int64_t>::max();
+    while (right > left) {
+        int64_t mid = left + (right - left) / 2;
+        int64_t c = count(m_unique, mid, x);
+        if (c < k) {
+            left = mid + 1;
+        }
+        else {
+            right = mid;
+        }
+    }
+
+    out << left << std::endl;
 }
 
 int main() {
-    std::ifstream f("input.txt");
-    std::ofstream out("output.txt");
-    func(f, out);
-    // func(std::cin, std::cout);
+    func(std::cin, std::cout);
     return 0;
 }
