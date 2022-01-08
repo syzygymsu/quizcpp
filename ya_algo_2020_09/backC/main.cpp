@@ -1,15 +1,18 @@
 // problems/B/
 
+// https://yandex.ru/cup/backend/analysis/
+
 #include <iostream>
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
 #include <cstdint>
+#include <limits>
 
-int64_t count(const std::unordered_map<int, int>& map, long T, int X) {
+int64_t count(const std::unordered_map<int, int>& map, int64_t T, int X) {
     int64_t c = 0;
     for (const auto& ti : map) {
-        c += std::max((T - (long)ti.second + X) / X, 0L);
+        c += std::max((T - ti.second + X) / X, (int64_t)0);
     }
     return c;
 }
@@ -19,8 +22,8 @@ void func(std::istream& f, std::ostream& out) {
     f >> n;
     f >> x;
     f >> k;
-    std::unordered_map<int, int> m_unique;
 
+    std::unordered_map<int, int> m_unique;
     for (int i = 0; i < n; ++i) {
         int t;
         f >> t;
@@ -35,9 +38,9 @@ void func(std::istream& f, std::ostream& out) {
     }
 
     int64_t left = 0;
-    int64_t right = 1e19;
+    int64_t right = std::numeric_limits<int64_t>::max()/2;
     while (right > left) {
-        int64_t mid = left + (right - left) / 2;
+        int64_t mid = (right + left) / 2;
         int64_t c = count(m_unique, mid, x);
         if (c < k) {
             left = mid + 1;
