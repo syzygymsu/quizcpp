@@ -78,10 +78,36 @@ bool Miller(ll p, int iteration)
     return true;
 }
 
+// works under 1373653 
+// https://stackoverflow.com/questions/4424374/determining-if-a-number-is-prime
+bool IsPrime(int number)
+{
+    if (((!(number & 1)) && number != 2) || (number < 2) || (number % 3 == 0 && number != 3))
+        return false;
+
+    for (int k = 1; 36 * k * k - 12 * k < number; ++k)
+        if ((number % (6 * k + 1) == 0) || (number % (6 * k - 1) == 0))
+            return false;
+    return true;
+}
+
+bool isPrimeSlow(int number) {
+
+    if (number < 2) return false;
+    if (number == 2) return true;
+    if (number % 2 == 0) return false;
+    for (int i = 3; (i * i) <= number; i += 2) {
+        if (number % i == 0) return false;
+    }
+    return true;
+
+}
+
+
 bool test(int a) {
     int cnt = 0;
     for (int i = a; i < a + 100; ++i) {
-        if (Miller(i, 5)) {
+        if (isPrimeSlow(i)) {
             // std::cout << i << std::endl;
             ++cnt;
         }
