@@ -80,7 +80,7 @@ bool Miller(ll p, int iteration)
 
 // works under 1373653 
 // https://stackoverflow.com/questions/4424374/determining-if-a-number-is-prime
-bool IsPrime(int number)
+bool isPrime(int number)
 {
     if (((!(number & 1)) && number != 2) || (number < 2) || (number % 3 == 0 && number != 3))
         return false;
@@ -112,13 +112,12 @@ bool test(int a) {
             ++cnt;
         }
     }
-    return cnt == 5;
+    return cnt == 0;
 }
 
 int main()
 {
-    int i = 0;
-    for (; i < 18860; ++i) {
+    for (int i = 0; i < 1000000; ++i) {
         if (test(i)) {
             std::cout << i << std::endl;
         }
