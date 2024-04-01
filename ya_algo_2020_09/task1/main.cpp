@@ -2,13 +2,7 @@
 // https://contest.yandex.ru/contest/19811/problems/O/
 
 #include <iostream>
-#include <bit>
-
-typedef unsigned int ui;
-
-void setBitToMask(int n, ui& mask) {
-    mask |= 1 << n;
-}
+#include <bitset>
 
 int readInt() {
     int x;
@@ -26,17 +20,17 @@ void print(int count) {
 }
 
 int main() {
-    ui mask = 0;
+    std::bitset<32> mask;
     for (int i = 0; i < 10; ++i) {
-        setBitToMask(readInt() - 1, mask);
+        mask.set(readInt() - 1);
     }
     int n = readInt();
     for (int i = 0; i < n; ++i) {
-        ui ticket = 0;
+        std::bitset<32> ticket;
         for (int j = 0; j < 6; ++j) {
-            setBitToMask(readInt() - 1, ticket);
+            ticket.set(readInt() - 1);
         }
-        print(std::popcount(mask & ticket));
+        print((mask & ticket).count());
     }
     return 0;
 }
