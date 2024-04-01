@@ -13,7 +13,7 @@ long long combine(long long& n, long long d) {
     return tmp * (d - 1);
 }
 
-long long primeFactors(long long& n) {
+long long primeFactors(long long n) {
     long long res = 1;
     if (n % 2 == 0) {
         res *= combine(n, 2);
