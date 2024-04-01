@@ -14,15 +14,13 @@ long long combine(long long& n, long long d) {
     return tmp * (d - 1);
 }
 
-long long primeFactors(long long& n, long long limit)
-{
+long long primeFactors(long long& n, long long limit) {
     long long res = 1;
     if (n % 2 == 0) {
-        res = combine(n, 2);
+        res *= combine(n, 2);
     }
 
     for (int i = 3; i <= limit; i = i + 2) {
-        // While i divides n, print i and divide n 
         if (n % i == 0) {
             res *= combine(n, i);
         }
@@ -36,10 +34,6 @@ long long fast(long long n) {
     if (n == 1) {
         return 2;
     }
-    if (n == 2) {
-        return 1;
-    }
-
     long long limit = (long long)std::sqrt(n) + 1;
     long long res = primeFactors(n, limit);
     if (n < limit) {
