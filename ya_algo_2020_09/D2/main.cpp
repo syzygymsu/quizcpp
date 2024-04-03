@@ -3,14 +3,14 @@
 #include <iostream>
 
 long long combine(long long& n, long long d) {
-    long long tmp = 1;
-    do
-    {
+    long long tmp = d - 1;
+    while(true) {
+        n /= d;
+        if (n % d != 0) {
+            return tmp;
+        }
         tmp *= d;
-        n = n / d;
-    } while (n % d == 0);
-    tmp /= d;
-    return tmp * (d - 1);
+    }
 }
 
 long long primeFactors(long long n) {
@@ -18,7 +18,7 @@ long long primeFactors(long long n) {
     if (n % 2 == 0) {
         res *= combine(n, 2);
     }
-    for (long long i = 3; i * i <= n; i = i + 2) {
+    for (long long i = 3; i * i <= n; i += 2) {
         if (n % i == 0) {
             res *= combine(n, i);
         }
@@ -30,7 +30,7 @@ long long primeFactors(long long n) {
 }
 
 // n = p1^a1*p2^a2*...pk^ak;
-// res = fast(p1)*p1^(a1-1)+... + fast(pk)*pk^(ak-1);
+// res = (p1-1)*p1^(a1-1)*...*(pk-1)*pk^(ak-1);
 long long fast(long long n) {
     if (n == 1) {
         return 2;

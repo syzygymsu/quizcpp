@@ -1,8 +1,9 @@
 #include <vector>
+#include <numeric>
 
 // https://leetcode.com/problems/domino-and-tromino-tiling/description/
 class Solution {
-    const int modulo = 1e9 + 7;
+    static const int modulo = 1e9 + 7;
 
 public:
     int numTilings(int n) {
@@ -11,7 +12,7 @@ public:
         return helper(n, ans);
     }
 
-    int add(int k, long long diff) {
+    static int add(int k, long long diff) {
         return (diff + k) % modulo;
     }
 
@@ -34,7 +35,9 @@ public:
             forth = add(forth, 2ll * helper(n - 4 - 2 * i, ans));
         }
 
-        int res = add(add(add(third, first), second), forth);
+        // int res = add(add(add(third, first), second), forth);
+        int v[] = {first, second, third, forth};
+        int res = std::reduce(std::begin(v), std::end(v), 0, add);
         ans[n] = res;
         return res;
     }
